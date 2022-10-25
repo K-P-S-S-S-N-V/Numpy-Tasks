@@ -9,7 +9,7 @@
   <strong>A <a href="https://numpy.org/">NumPy</a> project Q/A</strong>
 
   <h3>
-    <a href="https://numpy.org/doc/stable/user/">Guide by Numpy.org</a>
+    <a href="https://numpy.org/doc/stable/user/">Guide to follow by Numpy.org</a>
     <span>
   </h3>
 </div>
@@ -2462,129 +2462,30 @@ Output:
 [-0.18005813  0.22114647]
 ```
 
+## Hello Developer's & visitors
 
-## Installation
-
-The Wasmtime CLI can be installed on Linux and macOS with a small install
-script:
-
-```sh
-curl https://wasmtime.dev/install.sh -sSf | bash
-```
-
-Windows or otherwise interested users can download installers and
-binaries directly from the [GitHub
-Releases](https://github.com/bytecodealliance/wasmtime/releases) page.
-
-## Example
-
-If you've got the [Rust compiler
-installed](https://www.rust-lang.org/tools/install) then you can take some Rust
-source code:
-
-```rust
-fn main() {
-    println!("Hello, world!");
-}
-```
-
-and compile/run it with:
-
-```sh
-$ rustup target add wasm32-wasi
-$ rustc hello.rs --target wasm32-wasi
-$ wasmtime hello.wasm
-Hello, world!
-```
-
-## Features
-
-* **Fast**. Wasmtime is built on the optimizing [Cranelift] code generator to
-  quickly generate high-quality machine code either at runtime or
-  ahead-of-time. Wasmtime is optimized for efficient instantiation, low-overhead
-  calls between the embedder and wasm, and scalability of concurrent instances.
-
-* **[Secure]**. Wasmtime's development is strongly focused on correctness and
-  security. Building on top of Rust's runtime safety guarantees, each Wasmtime
-  feature goes through careful review and consideration via an [RFC
-  process]. Once features are designed and implemented, they undergo 24/7
-  fuzzing donated by [Google's OSS Fuzz]. As features stabilize they become part
-  of a [release][release policy], and when things go wrong we have a
-  well-defined [security policy] in place to quickly mitigate and patch any
-  issues. We follow best practices for defense-in-depth and integrate
-  protections and mitigations for issues like Spectre. Finally, we're working to
-  push the state-of-the-art by collaborating with academic researchers to
-  formally verify critical parts of Wasmtime and Cranelift.
-
-* **[Configurable]**. Wasmtime uses sensible defaults, but can also be
-  configured to provide more fine-grained control over things like CPU and
-  memory consumption. Whether you want to run Wasmtime in a tiny environment or
-  on massive servers with many concurrent instances, we've got you covered.
-
-* **[WASI]**. Wasmtime supports a rich set of APIs for interacting with the host
-  environment through the [WASI standard](https://wasi.dev).
-
-* **[Standards Compliant]**. Wasmtime passes the [official WebAssembly test
-  suite](https://github.com/WebAssembly/testsuite), implements the [official C
-  API of wasm](https://github.com/WebAssembly/wasm-c-api), and implements
-  [future proposals to WebAssembly](https://github.com/WebAssembly/proposals) as
-  well. Wasmtime developers are intimately engaged with the WebAssembly
-  standards process all along the way too.
-
-[Wasmtime]: https://github.com/bytecodealliance/wasmtime
-[Cranelift]: https://github.com/bytecodealliance/wasmtime/blob/main/cranelift/README.md
-[Google's OSS Fuzz]: https://google.github.io/oss-fuzz/
-[security policy]: https://bytecodealliance.org/security
-[RFC process]: https://github.com/bytecodealliance/rfcs
-[release policy]: https://docs.wasmtime.dev/stability-release.html
-[Secure]: https://docs.wasmtime.dev/security.html
-[Configurable]: https://docs.rs/wasmtime/latest/wasmtime/struct.Config.html
-[WASI]: https://docs.rs/wasmtime-wasi/latest/wasmtime_wasi/
-[Standards Compliant]: https://docs.wasmtime.dev/stability-wasm-proposals-support.html
-
+If you find an error or think you've a better way to
+solve some of them, feel
+free to open an issue at <https://github.com/K-P-S-S-S-N-V/Numpy-Tasks/issues>.
+File automatically generated. See the documentation to update questions/answers/hints programmatically.
+  
 ## Language Support
 
-You can use Wasmtime from a variety of different languages through embeddings of
-the implementation:
+* **[python]** 
+* **[NumPy Library ]** 
 
-* **[Rust]** - the [`wasmtime` crate]
-* **[C]** - the [`wasm.h`, `wasi.h`, and `wasmtime.h` headers][c-headers], [CMake](crates/c-api/CMakeLists.txt) or [`wasmtime` Conan package]
-* **C++** - the [`wasmtime-cpp` repository][wasmtime-cpp] or use [`wasmtime-cpp` Conan package]
-* **[Python]** - the [`wasmtime` PyPI package]
-* **[.NET]** - the [`Wasmtime` NuGet package]
-* **[Go]** - the [`wasmtime-go` repository]
-
-[Rust]: https://bytecodealliance.github.io/wasmtime/lang-rust.html
-[C]: https://bytecodealliance.github.io/wasmtime/examples-c-embed.html
-[`wasmtime` crate]: https://crates.io/crates/wasmtime
-[c-headers]: https://bytecodealliance.github.io/wasmtime/c-api/
-[Python]: https://bytecodealliance.github.io/wasmtime/lang-python.html
-[`wasmtime` PyPI package]: https://pypi.org/project/wasmtime/
-[.NET]: https://bytecodealliance.github.io/wasmtime/lang-dotnet.html
-[`Wasmtime` NuGet package]: https://www.nuget.org/packages/Wasmtime
-[Go]: https://bytecodealliance.github.io/wasmtime/lang-go.html
-[`wasmtime-go` repository]: https://pkg.go.dev/github.com/bytecodealliance/wasmtime-go
-[wasmtime-cpp]: https://github.com/bytecodealliance/wasmtime-cpp
-[`wasmtime` Conan package]: https://conan.io/center/wasmtime
-[`wasmtime-cpp` Conan package]: https://conan.io/center/wasmtime-cpp
-
-## Documentation
-
-[📚 Read the Wasmtime guide here! 📚][guide]
-
-The [wasmtime guide][guide] is the best starting point to learn about what
-Wasmtime can do for you or help answer your questions about Wasmtime. If you're
-curious in contributing to Wasmtime, [it can also help you do
-that][contributing]!
-
-[contributing]: https://bytecodealliance.github.io/wasmtime/contributing.html
-[guide]: https://bytecodealliance.github.io/wasmtime
+[python]: https://www.python.org/
+[NumPy Library]: https://numpy.org/
 
 ---
 
-It's Wasmtime.
+It's Poorna Venkatesh kadali
 
 <h3>
-    <a href="https://www.linkedin.com/in/venkatesh-kadali/">Chat on LinkedIn</a>
+    <a href="https://www.linkedin.com/in/venkatesh-kadali/">Reach Out to me at LinkedIn</a>
     <span> | </span>
-  </h3>
+    <a href="https://github.com/K-P-S-S-S-N-V">Reach Out to me on GitHub</a>
+    <span> | </span>
+    <a href="https://www.kaggle.com/poornakadali">Reach Out to me on Kaggle</a>
+    <span>  </span>    
+</h3>
