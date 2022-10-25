@@ -926,7 +926,8 @@ print(np.linalg.det(C))
 Output:
 ```
 3638.1636371179666
-
+```
+  
 #### 48. Print the minimum and maximum representable value for each numpy scalar type (★★☆) 
 (**hint**: np.iinfo, np.finfo, eps)
 ```python
@@ -1556,74 +1557,407 @@ Output:
   
 #### 72. How to swap two rows of an array? (★★★) 
 (**hint**: array\[\[\]\] = array\[\[\]\])
+```python
+import numpy as np
 
-
+A = np.arange(25).reshape(5,5)
+A[[0,1]] = A[[1,0]]
+print(A)
+```
+Output:
+```
+[[ 5  6  7  8  9]
+ [ 0  1  2  3  4]
+ [10 11 12 13 14]
+ [15 16 17 18 19]
+ [20 21 22 23 24]]
+```
 
 #### 73. Consider a set of 10 triplets describing 10 triangles (with shared vertices), find the set of unique line segments composing all the  triangles (★★★) 
 (**hint**: repeat, np.roll, np.sort, view, np.unique)
+```python
+import numpy as np
 
-
+faces = np.random.randint(0,100,(10,3))
+F = np.roll(faces.repeat(2,axis=1),-1,axis=1)
+F = F.reshape(len(F)*3,2)
+F = np.sort(F,axis=1)
+G = F.view( dtype=[('p0',F.dtype),('p1',F.dtype)] )
+G = np.unique(G)
+print(G)
+```
+Output:
+```
+[(11, 51) (11, 98) (15, 30) (15, 59) (15, 62) (15, 64) (15, 69) (15, 89)
+ (17, 23) (17, 95) (23, 95) (24, 58) (24, 93) (30, 62) (32, 80) (32, 89)
+ (48, 54) (48, 81) (50, 54) (50, 59) (51, 98) (54, 59) (54, 81) (58, 93)
+ (59, 89) (64, 69) (70, 80) (80, 80) (80, 89)]
+```
 
 #### 74. Given an array C that is a bincount, how to produce an array A such that np.bincount(A) == C? (★★★) 
 (**hint**: np.repeat)
+```python
+import numpy as np
 
-
+C = np.bincount([1,1,2,3,4,4,6])
+A = np.repeat(np.arange(len(C)), C)
+print(A)
+```
+Output:
+```
+[1 1 2 3 4 4 6]
+```
 
 #### 75. How to compute averages using a sliding window over an array? (★★★) 
 (**hint**: np.cumsum)
+```python
+import numpy as np
 
-
-
+def moving_average(a, n=3) :
+    ret = np.cumsum(a, dtype=float)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1:] / n
+Z = np.arange(20)
+print(moving_average(Z, n=3))
+```
+Output:
+```
+[ 1.  2.  3.  4.  5.  6.  7.  8.  9. 10. 11. 12. 13. 14. 15. 16. 17. 18.]
+```
+  
 #### 76. Consider a one-dimensional array Z, build a two-dimensional array whose first row is (Z\[0\],Z\[1\],Z\[2\]) and each subsequent row is  shifted by 1 (last row should be (Z\[-3\],Z\[-2\],Z\[-1\]) (★★★) 
 (**hint**: from numpy.lib import stride_tricks)
+```python
+import numpy as np
 
-
-
+def rolling(a, window):
+    shape = (a.size - window + 1, window)
+    strides = (a.itemsize, a.itemsize)
+    return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
+Z = rolling(np.arange(10), 3)
+print(Z)
+```
+Output:
+```
+[[0 1 2]
+ [1 2 3]
+ [2 3 4]
+ [3 4 5]
+ [4 5 6]
+ [5 6 7]
+ [6 7 8]
+ [7 8 9]]
+```
+  
 #### 77. How to negate a boolean, or to change the sign of a float inplace? (★★★) 
 (**hint**: np.logical_not, np.negative)
+```python
+import numpy as np
+
+Z = np.random.randint(0,2,100)
+print ('original: ')
+print (Z)
+print('Negating a boolean: ')
+print(np.logical_not(Z, out=Z))
 
 
+Z = np.random.uniform(-1.0,1.0,10)
+print ('original: ')
+print (Z)
+print ('Change the sign of float inplace: ')
+print(np.negative(Z, out=Z))
+```
+Output:
+```
+original: 
+[1 1 1 1 0 1 0 1 1 0 0 0 1 0 1 1 0 1 1 0 0 0 0 1 0 1 1 1 1 1 0 1 1 1 1 0 1
+ 1 1 0 1 1 0 0 0 0 0 0 0 1 0 0 0 1 1 1 0 1 0 0 0 0 0 0 1 0 1 1 1 0 0 1 0 1
+ 1 1 1 1 0 1 0 1 1 1 0 1 0 1 1 1 1 1 1 1 0 1 1 0 1 0]
+Negating a boolean: 
+[0 0 0 0 1 0 1 0 0 1 1 1 0 1 0 0 1 0 0 1 1 1 1 0 1 0 0 0 0 0 1 0 0 0 0 1 0
+ 0 0 1 0 0 1 1 1 1 1 1 1 0 1 1 1 0 0 0 1 0 1 1 1 1 1 1 0 1 0 0 0 1 1 0 1 0
+ 0 0 0 0 1 0 1 0 0 0 1 0 1 0 0 0 0 0 0 0 1 0 0 1 0 1]
+original: 
+[-0.06836599  0.04793971  0.6589628  -0.94529021 -0.87511555 -0.36042867
+ -0.25548385  0.42935055 -0.99462483 -0.89615931]
+Change the sign of float inplace: 
+[ 0.06836599 -0.04793971 -0.6589628   0.94529021  0.87511555  0.36042867
+  0.25548385 -0.42935055  0.99462483  0.89615931]
+```
 
 #### 78. Consider 2 sets of points P0,P1 describing lines (2d) and a point p, how to compute distance from p to each line i  (P0\[i\],P1\[i\])? (★★★)
+```python
+import numpy as np
 
+def distance(P0, P1, p):
+    T = P1 - P0
+    L = (T**2).sum(axis=1)
+    U = -((P0[:,0]-p[...,0])*T[:,0] + (P0[:,1]-p[...,1])*T[:,1]) / L
+    U = U.reshape(len(U),1)
+    D = P0 + U*T - p
+    return np.sqrt((D**2).sum(axis=1))
 
+P0 = np.random.uniform(-10,10,(10,2))
+P1 = np.random.uniform(-10,10,(10,2))
+p  = np.random.uniform(-10,10,( 1,2))
+print(distance(P0, P1, p))
+```
+Output:
+```
+#random
+[ 1.48187788  0.76219602  5.13748819  2.23377232  0.06870344  0.19233972
+  2.76808007 12.28279927  5.76718417  1.2419688 ]
+```
 
 #### 79. Consider 2 sets of points P0,P1 describing lines (2d) and a set of points P, how to compute distance from each point j (P\[j\]) to each line i (P0\[i\],P1\[i\])? (★★★)
+```python
+import numpy as np
 
-
+P0 = np.random.uniform(-10, 10, (5,2))
+P1 = np.random.uniform(-10,10,(5,2))
+p = np.random.uniform(-10, 10, (5,2))
+print (np.array([distance(P0,P1,p_i) for p_i in p]))
+```
+Output:
+```
+#random
+[[ 1.13801647  3.94641267  9.28238157  3.21996078  0.87552165]
+ [ 1.58216632  3.86949657  8.94877174  2.7613081   0.57445507]
+ [12.99729203  9.99095316  4.98460306  1.46770069  6.92546331]
+ [15.55367254  5.30865891  4.59349335  5.69796484  0.88336616]
+ [ 2.6255866   7.39170491  9.83496375  1.5861636   4.52283845]]
+```
 
 #### 80. Consider an arbitrary array, write a function that extract a subpart with a fixed shape and centered on a given element (pad with a `fill` value when necessary) (★★★) 
 (**hint**: minimum, maximum)
+```python
+import numpy as np
 
+Z = np.random.randint(0,10,(10,10))
+shape = (5,5)
+fill  = 0
+position = (1,1)
 
+R = np.ones(shape, dtype=Z.dtype)*fill
+P  = np.array(list(position)).astype(int)
+Rs = np.array(list(R.shape)).astype(int)
+Zs = np.array(list(Z.shape)).astype(int)
+
+R_start = np.zeros((len(shape),)).astype(int)
+R_stop  = np.array(list(shape)).astype(int)
+Z_start = (P-Rs//2)
+Z_stop  = (P+Rs//2)+Rs%2
+
+R_start = (R_start - np.minimum(Z_start,0)).tolist()
+Z_start = (np.maximum(Z_start,0)).tolist()
+R_stop = np.maximum(R_start, (R_stop - np.maximum(Z_stop-Zs,0))).tolist()
+Z_stop = (np.minimum(Z_stop,Zs)).tolist()
+
+r = [slice(start,stop) for start,stop in zip(R_start,R_stop)]
+z = [slice(start,stop) for start,stop in zip(Z_start,Z_stop)]
+R[r] = Z[z]
+print(Z)
+print(R)
+```
+Output:
+```
+[[1 5 2 1 6 4 5 4 0 6]
+ [8 3 2 6 1 2 2 3 7 8]
+ [1 6 0 6 5 0 1 5 4 4]
+ [4 6 5 7 6 4 7 1 0 3]
+ [1 2 5 8 1 9 9 2 2 1]
+ [4 4 4 4 3 2 8 1 5 2]
+ [0 0 4 2 7 8 1 3 1 1]
+ [6 6 0 8 8 2 2 7 0 5]
+ [2 8 6 1 1 3 6 8 0 4]
+ [4 9 7 0 4 0 2 5 3 5]]
+[[0 0 0 0 0]
+ [0 1 5 2 1]
+ [0 8 3 2 6]
+ [0 1 6 0 6]
+ [0 4 6 5 7]]
+FutureWarning: Using a non-tuple sequence for multidimensional indexing is deprecated; use `arr[tuple(seq)]` instead of `arr[seq]`. In the future this will be interpreted as an array index, `arr[np.array(seq)]`, which will result either in an error or a different result.
+  R[r] = Z[z]
 
 #### 81. Consider an array Z = \[1,2,3,4,5,6,7,8,9,10,11,12,13,14\], how to generate an array R = \[\[1,2,3,4\], \[2,3,4,5\], \[3,4,5,6\], ..., \[11,12,13,14\]\]? (★★★) 
 (**hint**: stride\_tricks.as\_strided)
+```python
+import numpy as np
 
+Z = np.arange(1,15,dtype=int)
 
-
+def rolling(a, window):
+    shape = (a.size - window + 1, window)
+    strides = (a.itemsize, a.itemsize)
+    return np.lib.stride_tricks.as_strided(a, shape=shape, strides=strides)
+R = rolling(Z, 4)
+print ('original: ')
+print (Z)
+print ('after strides: ')
+print(R)
+```
+Output:
+```
+original: 
+[ 1  2  3  4  5  6  7  8  9 10 11 12 13 14]
+after strides: 
+[[ 1  2  3  4]
+ [ 2  3  4  5]
+ [ 3  4  5  6]
+ [ 4  5  6  7]
+ [ 5  6  7  8]
+ [ 6  7  8  9]
+ [ 7  8  9 10]
+ [ 8  9 10 11]
+ [ 9 10 11 12]
+ [10 11 12 13]
+ [11 12 13 14]]
+```
+  
 #### 82. Compute a matrix rank (★★★) 
 (**hint**: np.linalg.svd) (suggestion: np.linalg.svd)
+```python
+import numpy as np
 
-
+Z = np.random.uniform(0,1,(10,10))
+U, S, V = np.linalg.svd(Z) # Singular Value Decomposition
+rank = np.sum(S > 1e-10)
+print (rank)
+```
+Output:
+```
+10
+```
 
 #### 83. How to find the most frequent value in an array? 
 (**hint**: np.bincount, argmax)
+```python
+import numpy as np
 
-
-
+Z = np.random.randint(0,10,50)
+print (Z)
+print('rank:', np.bincount(Z).argmax())
+```
+Output:
+```
+#random
+[0 8 3 2 1 1 6 6 8 6 5 3 1 3 6 8 1 5 9 9 6 6 1 5 8 0 2 2 1 1 0 7 2 7 0 6 2
+ 8 9 8 6 1 3 6 1 3 8 4 0 5]
+rank: 1
+```
+  
 #### 84. Extract all the contiguous 3x3 blocks from a random 10x10 matrix (★★★) 
 (**hint**: stride\_tricks.as\_strided)
+```python
+import numpy as np
+
+Z = np.random.randint(0,5,(6,6))
+n = 3
+i = 1 + (Z.shape[0]-3)
+j = 1 + (Z.shape[1]-3)
+C = np.lib.stride_tricks.as_strided(Z, shape=(i, j, n, n), strides=Z.strides + Z.strides)
+print(C)
+```
+Output:
+#random
+[[[[3 4 3]
+   [4 4 4]
+   [0 4 4]]
+
+  [[4 3 3]
+   [4 4 4]
+   [4 4 4]]
+
+  [[3 3 0]
+   [4 4 0]
+   [4 4 3]]
+
+  [[3 0 0]
+   [4 0 2]
+   [4 3 3]]]
 
 
+ [[[4 4 4]
+   [0 4 4]
+   [1 1 2]]
 
+  [[4 4 4]
+   [4 4 4]
+   [1 2 3]]
+
+  [[4 4 0]
+   [4 4 3]
+   [2 3 0]]
+
+  [[4 0 2]
+   [4 3 3]
+   [3 0 0]]]
+
+
+ [[[0 4 4]
+   [1 1 2]
+   [0 1 3]]
+
+  [[4 4 4]
+   [1 2 3]
+   [1 3 4]]
+
+  [[4 4 3]
+   [2 3 0]
+   [3 4 2]]
+
+  [[4 3 3]
+   [3 0 0]
+   [4 2 0]]]
+
+
+ [[[1 1 2]
+   [0 1 3]
+   [2 1 2]]
+
+  [[1 2 3]
+   [1 3 4]
+   [1 2 3]]
+
+  [[2 3 0]
+   [3 4 2]
+   [2 3 2]]
+
+  [[3 0 0]
+   [4 2 0]
+   [3 2 0]]]]
+```
 #### 85. Create a 2D array subclass such that Z\[i,j\] == Z\[j,i\] (★★★) 
 (**hint**: class method)
+```python
+import numpy as np
 
+class Symetric(np.ndarray):
+    def __setitem__(self, index, value):
+        i,j = index
+        super(Symetric, self).__setitem__((i,j), value)
+        super(Symetric, self).__setitem__((j,i), value)
 
+def symetric(Z):
+    return np.asarray(Z + Z.T - np.diag(Z.diagonal())).view(Symetric)
+
+S = symetric(np.random.randint(0,10,(5,5)))
+S[2,3] = 42
+print(S)
+```
+Output:
+```
+[[ 1  8 14 11 12]
+ [ 8  0  9  5 10]
+ [14  9  2 42  9]
+ [11  5 42  6 12]
+ [12 10  9 12  2]]
+```
 
 #### 86. Consider a set of p matrices wich shape (n,n) and a set of p vectors with shape (n,1). How to compute the sum of of the p matrix products at once? (result has shape (n,1)) (★★★) 
 (**hint**: np.tensordot)
+```python
+
 
 
 
