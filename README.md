@@ -16,8 +16,6 @@
 
 # Numpy
 
-
-
 #### 1. Import the numpy package under the name `np` (★☆☆) 
 (**hint**: import … as …)
 ```python
@@ -27,6 +25,7 @@ import numpy as np
 #### 2. Print the numpy version and the configuration (★☆☆) 
 (**hint**: np.\_\_version\_\_, np.show\_config)
 ```python
+import numpy as np
 #To Show version of NumPy
 print(np.__version__)
 ```
@@ -38,6 +37,7 @@ Output:
   <h6><code>Or</code></h6>
   
 ```python
+import numpy as np
 #to Show Configuration of NumPy in python
 np.show_config()
 #Or
@@ -55,12 +55,16 @@ lapack_opt_info:
 #### 3. Create a null vector of size 10 (★☆☆) 
 (**hint**: np.zeros)
 ```python
+import numpy as np
 # create a numpy null vector os size 10
 def null_array(n):
     x=np.zeros(n)
     return x
 print(null_array(10))
+```
 #Or
+```
+import numpy as np
 X = np.zeros(10)
 print(X)
 ```
@@ -72,7 +76,8 @@ Output:
 #### 4.  How to find the memory size of any array (★☆☆) 
 (**hint**: size, itemsize)
 ```python
-#Example: 
+#Example:
+import numpy as np
 x = np.array([100,20,34])     #create a numpy 1d-array
 print(x.size)                 #Size of the array
 print(x.itemsize)             #Memory size of one array element in bytes
@@ -86,11 +91,13 @@ Output:
 #### 5.How to get the documentation of the numpy add function from the command line? (★☆☆) 
 (**hint**: np.info)
 ```python
+import numpy as np
 np.info(np.add)
 ```
 #### 6.  Create a null vector of size 10 but the fifth value which is 1 (★☆☆) 
 (**hint**: array\[4\])
 ```python
+import numpy as np
 X= np.zeros(10)
 X[4]= 1
 print (X)
@@ -103,6 +110,7 @@ Output:
 #### 7.  Create a vector with values ranging from 10 to 49 (★☆☆) 
 (**hint**: np.arange)
 ```python
+import numpy as np
 X=np.arange(10,50)
 print(X)
 ```
@@ -115,6 +123,7 @@ Output:
 #### 8.  Reverse a vector (first element becomes last) (★☆☆) 
 (**hint**: array\[::-1\])
 ```python
+import numpy as np
 array = np.arange(10,50)
 array = array[::-1]
 print(array)
@@ -128,6 +137,7 @@ Output:
 #### 9.  Create a 3x3 matrix with values ranging from 0 to 8 (★☆☆) 
 (**hint**: reshape)
 ```python
+import numpy as np
 X = np.arange(9).reshape(3,3)
 print (X)
 ```
@@ -141,6 +151,7 @@ Output:
 #### 10. Find indices of non-zero elements from \[1,2,0,0,4,0\] (★☆☆) 
 (**hint**: np.nonzero)
 ```python
+import numpy as np
 n_z = np.nonzero([1,2,0,0,4,0])
 print(n_z)
 ```
@@ -152,6 +163,7 @@ Output:
 #### 11. Create a 3x3 identity matrix (★☆☆) 
 (**hint**: np.eye)
 ```python
+import numpy as np
 X = np.eye(3)
 print(X)
 ```
@@ -165,6 +177,7 @@ Output:
 #### 12. Create a 3x3x3 array with random values (★☆☆) 
 (**hint**: np.random.random)
 ```python
+import numpy as np
 X = np.random.random((3,3,3))
 print(X)
 ```
@@ -186,6 +199,7 @@ Output:
 #### 13. Create a 10x10 array with random values and find the minimum and maximum values (★☆☆) 
 (**hint**: min, max)
 ```python
+import numpy as np
 X = np.random.random((10,10)) #to print 10*10 random matrix
 print(X)
 Xmin, Xmax = X.min(), X.max() #to print Minimum and Maximum values in 10*10 random Matrix
@@ -219,6 +233,7 @@ Output:
 #### 14. Create a random vector of size 30 and find the mean value (★☆☆) 
 (**hint**: mean)
 ```python
+import numpy as np
 X = np.random.random(10)
 print(X)
 mean = X.mean()
@@ -258,6 +273,7 @@ np.nan - np.nan
 0.3 == 3 * 0.1
 ```
 ```python
+import numpy as np
 print(0 * np.nan)
 print(np.nan == np.nan)
 print(np.inf > np.nan)
@@ -276,6 +292,7 @@ False
 #### 18. Create a 5x5 matrix with values 1,2,3,4 just below the diagonal (★☆☆) 
 (**hint**: np.diag)
 ```python
+import numpy as np
 X = np.diag(1+np.arange(4), k = -1)
 print (X)
 ```
@@ -291,6 +308,7 @@ Output:
 #### 19. Create a 8x8 matrix and fill it with a checkerboard pattern (★☆☆) 
 (**hint**: array\[::2\])
 ```python
+import numpy as np
 array = np.zeros ((8,8), dtype=int)
 array[1::2, ::2]= 1
 array[::2, 1::2] = 1
@@ -311,6 +329,7 @@ Output:
 #### 20. Consider a (6,7,8) shape array, what is the index (x,y,z) of the 100th element? 
 (**hint**: np.unravel_index)
 ```python
+import numpy as np
 print(np.unravel_index(100, (6,7,8))) 
 ```
 Output:
@@ -321,6 +340,7 @@ Output:
 #### 21. Create a checkerboard 8x8 matrix using the tile function (★☆☆) 
 (**hint**: np.tile)
 ```python
+import numpy as np
 array= np.array([[0,1], [1,0]])
 X = np.tile(array,(4,4))
 print (X)
@@ -340,6 +360,7 @@ Output:
 #### 22. Normalize a 5x5 random matrix (★☆☆) 
 (**hint**: (x - min) / (max - min))
 ```python
+import numpy as np
 X = np.random.random((5,5))
 Xmax, Xmin = X.max(), X.min()
 X= (X-Xmin)/(Xmax-Xmin)
@@ -363,6 +384,7 @@ Output:
 #### 24. Multiply a 5x3 matrix by a 3x2 matrix (real matrix product) (★☆☆) 
 (**hint**: np.dot | @)
 ```python
+import numpy as np
 X = np.dot(np.ones((5,3)), np.ones((3,2)))
 print(X)
 ```
@@ -385,6 +407,7 @@ have to do
 (**hint**: np.sum)
 
 ```python
+import numpy as np
 # Author: Jake VanderPlas
 
 print(sum(range(5),-1))
@@ -408,6 +431,7 @@ Z/1/1
 Z<Z>Z
 ```
 ```python
+import numpy as np
 #Let Z = 5 to find which of these expressions are legal.
 Z = 5
 print(Z**Z)
@@ -430,25 +454,168 @@ False
 #### 28. What are the result of the following expressions?
 
 ```python
+import numpy as np
 np.array(0) / np.array(0)
 np.array(0) // np.array(0)
 np.array([np.nan]).astype(int).astype(float)
 ```
-
-
-
+  
 #### 29. How to round away from zero a float array ? (★☆☆) 
 (**hint**: np.uniform, np.copysign, np.ceil, np.abs)
+```python
+import numpy as np
+def round_array(x,y):
+    return np.round(x,y)                  #Defining round_array function
+test = np.array([32.11, 51.5, 0.112])     #Setup the Data
+print(round_array(test,0))                #Printing rounded off array
+```
+Output:
+```
+[32. 52.  0.]
+```
 
-
-
-#### 30. How to find common values between two arrays? (★☆☆) 
+  #### 30. How to find common values between two arrays? (★☆☆) 
 (**hint**: np.intersect1d)
-
-
+```python
+import numpy as np
+ar1 = np.array([0, 1, 2, 3, 4, 10, 7, 6, 9])
+ar2 = [1, 3, 4, 0, 5, 9, 22, 29]
+print(np.intersect1d(ar1, ar2))                 # Common values between two arrays
+```
+Output:
+```
+[0 1 3 4 9]
+```
 
 #### 31. How to ignore all numpy warnings (not recommended)? (★☆☆) 
 (**hint**: np.seterr, np.errstate)
+```python
+import numpy as np
+data = np.random.random(1000).reshape(10, 10,10) * np.nan
+np.seterr(all="ignore")
+np.nanmedian(data, axis=[1, 2])
+print(data)
+```
+Or
+```python
+import numpy as np
+data = np.random.random(1000).reshape(10, 10,10) * np.nan
+np.errstate(all="ignore")
+np.nanmedian(data, axis=[1, 2])
+print(data)
+```
+Output:
+```
+[[[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]
+
+ [[nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]
+  [nan nan nan nan nan nan nan nan nan nan]]]
+  ```
 
 
 
