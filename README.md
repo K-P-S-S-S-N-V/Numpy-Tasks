@@ -258,9 +258,35 @@ array[1:-1, 1:-1]=0
 (**hint**: np.pad)
 
 ```python
-have to do
-```
+import numpy as np
+  
+Z = np.ones((5,5))
+Z = np.pad(Z, pad_width=1, mode='constant', constant_values=0)
+print(Z)
 
+# Using fancy indexing
+Z[:, [0, -1]] = 0
+Z[[0, -1], :] = 0
+print(Z)
+```
+Output:
+```
+[[0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 0. 0. 0. 0. 0. 0.]]
+[[0. 0. 0. 0. 0. 0. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 1. 1. 1. 1. 1. 0.]
+ [0. 0. 0. 0. 0. 0. 0.]]
+```
+  
 #### 17. What is the result of the following expression? (★☆☆) 
 (**hint**: NaN = not a number, inf = infinity)
 
@@ -378,9 +404,17 @@ Output:
 #### 23. Create a custom dtype that describes a color as four unsigned bytes (RGBA) (★☆☆) 
 (**hint**: np.dtype)
 ```python
-#have to do
+color = np.dtype([("r", np.ubyte),
+                  ("g", np.ubyte),
+                  ("b", np.ubyte),
+                  ("a", np.ubyte)])
+print(color)
 ```
-
+Output:
+```
+[('r', 'u1'), ('g', 'u1'), ('b', 'u1'), ('a', 'u1')]
+```
+  
 #### 24. Multiply a 5x3 matrix by a 3x2 matrix (real matrix product) (★☆☆) 
 (**hint**: np.dot | @)
 ```python
@@ -400,9 +434,16 @@ Output:
 #### 25. Given a 1D array, negate all elements which are between 3 and 8, in place. (★☆☆) 
 (**hint**: >, <=)
 ```python
-have to do
-```
+import numpy as np
 
+Z = np.arange(11)
+Z[(3 < Z) & (Z < 8)] *= -1
+print(Z)
+```
+Output:
+```
+[ 0  1  2  3 -4 -5 -6 -7  8  9 10]
+```
 #### 26. What is the output of the following script? (★☆☆) 
 (**hint**: np.sum)
 
@@ -674,10 +715,21 @@ Month: July, Year: 2016
 
 #### 35. How to compute ((A+B)\*(-A/2)) in place (without copy)? (★★☆) 
 (**hint**: np.add(out=), np.negative(out=), np.multiply(out=), np.divide(out=))
-```
-have to do
-```
+```python
+import numpy as np
 
+A = np.ones(3)*1
+B = np.ones(3)*2
+np.add(A,B,out=B)
+np.divide(A,2,out=A)
+np.negative(A,out=A)
+np.multiply(A,B,out=A)
+```
+Output:
+```
+array([-1.5, -1.5, -1.5])
+```
+  
 #### 36. Extract the integer part of a random array using 5 different methods (★★☆) 
 (**hint**: %, np.floor, np.ceil, astype, np.trunc)
 ```python
