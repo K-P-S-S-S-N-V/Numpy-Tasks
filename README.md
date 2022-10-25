@@ -1091,110 +1091,469 @@ FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; 
 #### 52. Consider a random vector with shape (100,2) representing coordinates, find point by point distances (★★☆) 
 (**hint**: np.atleast\_2d, T, np.sqrt)
 ```python
+import numpy as np
 
-
+Z = np.random.random((10,2))
+X,Y = np.atleast_2d(Z[:,0]), np.atleast_2d(Z[:,1])
+D = np.sqrt( (X-X.T)**2 + (Y-Y.T)**2)
+print(D)
+  
+import scipy                                              # Much faster with scipy
+import scipy.spatial                                      # Thanks Gavin Heverly-Coulson (#issue 1)
+Z = np.random.random((10,2))
+D = scipy.spatial.distance.cdist(Z,Z)
+print(D)
+```
+Output:
+```
+[[0.         0.6837053  0.87693457 0.69932163 0.84089316 0.13772494
+  0.33252113 0.47583549 0.78186516 0.9228082 ]
+ [0.6837053  0.         1.09571332 0.52998708 0.22848634 0.81840347
+  0.39382338 0.54179151 0.50981651 0.86531753]
+ [0.87693457 1.09571332 0.         0.60376085 1.05478916 0.92200082
+  0.80578567 0.56786752 0.68382887 0.39441623]
+ [0.69932163 0.52998708 0.60376085 0.         0.45182035 0.81952342
+  0.41608608 0.23426419 0.10503954 0.33721756]
+ [0.84089316 0.22848634 1.05478916 0.45182035 0.         0.978611
+  0.51508189 0.56194582 0.38935771 0.75705346]
+ [0.13772494 0.81840347 0.92200082 0.81952342 0.978611   0.
+  0.46920999 0.58946602 0.90689788 1.01690809]
+ [0.33252113 0.39382338 0.80578567 0.41608608 0.51508189 0.46920999
+  0.         0.25354058 0.478215   0.70932461]
+ [0.47583549 0.54179151 0.56786752 0.23426419 0.56194582 0.58946602
+  0.25354058 0.         0.33159788 0.4650036 ]
+ [0.78186516 0.50981651 0.68382887 0.10503954 0.38935771 0.90689788
+  0.478215   0.33159788 0.         0.36847191]
+ [0.9228082  0.86531753 0.39441623 0.33721756 0.75705346 1.01690809
+  0.70932461 0.4650036  0.36847191 0.        ]]
+[[0.         0.54559758 0.76357724 0.61884646 0.73788943 0.79647129
+  0.09169366 0.45023127 0.68757631 0.64729322]
+ [0.54559758 0.         0.71228975 1.07012953 1.10046618 0.64907838
+  0.45595018 0.60732169 0.94780871 0.82389458]
+ [0.76357724 0.71228975 0.         0.8025797  0.68073149 0.13155542
+  0.74425372 0.33321063 0.45940883 0.30959832]
+ [0.61884646 1.07012953 0.8025797  0.         0.22456273 0.91484595
+  0.69556555 0.5464748  0.38381322 0.50086168]
+ [0.73788943 1.10046618 0.68073149 0.22456273 0.         0.80617832
+  0.79801226 0.50954909 0.22188121 0.37286132]
+ [0.79647129 0.64907838 0.13155542 0.91484595 0.80617832 0.
+  0.76238316 0.40635912 0.58620434 0.43336174]
+ [0.09169366 0.45595018 0.74425372 0.69556555 0.79801226 0.76238316
+  0.         0.45243198 0.72534239 0.66626692]
+ [0.45023127 0.60732169 0.33321063 0.5464748  0.50954909 0.40635912
+  0.45243198 0.         0.34048753 0.22925303]
+ [0.68757631 0.94780871 0.45940883 0.38381322 0.22188121 0.58620434
+  0.72534239 0.34048753 0.         0.15507333]
+ [0.64729322 0.82389458 0.30959832 0.50086168 0.37286132 0.43336174
+  0.66626692 0.22925303 0.15507333 0.        ]]
+```
 
 #### 53. How to convert a float (32 bits) array into an integer (32 bits) in place? 
 (**hint**: astype(copy=False))
-
-
+```python
+import numpy as np
+Z = (np.random.rand(10)*100).astype(np.float32)
+Y = Z.view(np.int32)
+Y[:] = Z
+print(Y)
+```
+Output:
+```
+#random
+[49 52 49 87 18 63 86 63 18 30]
+```
 
 #### 54. How to read the following file? (★★☆) 
 (**hint**: np.genfromtxt)
-
 ```
 1, 2, 3, 4, 5
 6,  ,  , 7, 8
  ,  , 9,10,11
 ```
+```python
+import numpy as np
+from io import StringIO
 
-
+s = StringIO('''1, 2, 3, 4, 5                      
+                6,  ,  , 7, 8
+                 ,  , 9,10,11
+''')
+Z = np.genfromtxt(s, delimiter=",", dtype=np.int)
+print(Z)
+```
+Output:
+```
+[[ 1  2  3  4  5]
+ [ 6 -1 -1  7  8]
+ [-1 -1  9 10 11]]
+DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  Z = np.genfromtxt(s, delimiter=",", dtype=np.int)
+```
 
 #### 55. What is the equivalent of enumerate for numpy arrays? (★★☆) 
 (**hint**: np.ndenumerate, np.ndindex)
+```python
+import numpy as np
 
-
+Z = np.arange(9).reshape(3,3)
+for index, value in np.ndenumerate(Z):
+    print(index, value)
+for index in np.ndindex(Z.shape):
+    print(index, Z[index])
+```
+Output:
+```
+(0, 0) 0
+(0, 1) 1
+(0, 2) 2
+(1, 0) 3
+(1, 1) 4
+(1, 2) 5
+(2, 0) 6
+(2, 1) 7
+(2, 2) 8
+(0, 0) 0
+(0, 1) 1
+(0, 2) 2
+(1, 0) 3
+(1, 1) 4
+(1, 2) 5
+(2, 0) 6
+(2, 1) 7
+(2, 2) 8
+```
 
 #### 56. Generate a generic 2D Gaussian-like array (★★☆) 
 (**hint**: np.meshgrid, np.exp)
+```python
+import numpy as np
 
-
+X, Y = np.meshgrid(np.linspace(-1,1,10), np.linspace(-1,1,10))
+D = np.sqrt(X*X+Y*Y)
+sigma, mu = 1.0, 0.0
+Z = np.exp(-( (D-mu)**2 / ( 2.0 * sigma**2 ) ) )
+print(Z)
+```
+Output:
+```
+[[0.36787944 0.44822088 0.51979489 0.57375342 0.60279818 0.60279818
+  0.57375342 0.51979489 0.44822088 0.36787944]
+ [0.44822088 0.54610814 0.63331324 0.69905581 0.73444367 0.73444367
+  0.69905581 0.63331324 0.54610814 0.44822088]
+ [0.51979489 0.63331324 0.73444367 0.81068432 0.85172308 0.85172308
+  0.81068432 0.73444367 0.63331324 0.51979489]
+ [0.57375342 0.69905581 0.81068432 0.89483932 0.9401382  0.9401382
+  0.89483932 0.81068432 0.69905581 0.57375342]
+ [0.60279818 0.73444367 0.85172308 0.9401382  0.98773022 0.98773022
+  0.9401382  0.85172308 0.73444367 0.60279818]
+ [0.60279818 0.73444367 0.85172308 0.9401382  0.98773022 0.98773022
+  0.9401382  0.85172308 0.73444367 0.60279818]
+ [0.57375342 0.69905581 0.81068432 0.89483932 0.9401382  0.9401382
+  0.89483932 0.81068432 0.69905581 0.57375342]
+ [0.51979489 0.63331324 0.73444367 0.81068432 0.85172308 0.85172308
+  0.81068432 0.73444367 0.63331324 0.51979489]
+ [0.44822088 0.54610814 0.63331324 0.69905581 0.73444367 0.73444367
+  0.69905581 0.63331324 0.54610814 0.44822088]
+ [0.36787944 0.44822088 0.51979489 0.57375342 0.60279818 0.60279818
+  0.57375342 0.51979489 0.44822088 0.36787944]]
+```
 
 #### 57. How to randomly place p elements in a 2D array? (★★☆) 
 (**hint**: np.put, np.random.choice)
+```python
+import numpy as np
 
-
-
+n = 10
+p = 3
+Z = np.zeros((n,n))
+np.put(Z, np.random.choice(range(n*n), p, replace=False),1)
+print (Z)
+```
+Output:
+```
+[[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [1. 0. 0. 1. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]]
+```
+  
 #### 58. Subtract the mean of each row of a matrix (★★☆) 
 (**hint**: mean(axis=,keepdims=))
+```python
+import numpy as np
 
-
+X = np.random.rand(5, 10)
+Y = X - X.mean(axis=1, keepdims=True)             # Recent versions of numpy
+Y = X - X.mean(axis=1).reshape(-1, 1)             # Older versions of numpy
+print(Y)
+```
+Output:
+```
+[[-0.46647919 -0.22785805  0.47552928  0.3984473  -0.41337391 -0.27749467
+   0.25668582 -0.23524927  0.08449316  0.40529953]
+ [-0.1612853  -0.02727661 -0.05212843  0.49526687  0.03646314  0.56110108
+   0.04172705 -0.17430362 -0.28464718 -0.434917  ]
+ [-0.00964443  0.35466582 -0.29911968 -0.10610349 -0.14606521 -0.22172862
+   0.07389907  0.62728508 -0.11256618 -0.16062237]
+ [ 0.15669637 -0.13853239 -0.20639963 -0.11677556 -0.24068708  0.59644536
+  -0.35415446  0.10503397 -0.36591373  0.56428715]
+ [-0.15147641  0.25513489 -0.51472191  0.41859795 -0.04248227  0.22101292
+  -0.33749177  0.38515417  0.28819665 -0.52192424]]
+```
 
 #### 59. How to sort an array by the nth column? (★★☆) 
 (**hint**: argsort)
+```python
+import numpy as np
 
-
+Z = np.random.randint(0,10,(3,3))
+print(Z)
+print(Z[Z[:,1].argsort()])
+```
+Output:
+```
+#random
+[[0 8 8]
+ [7 6 6]
+ [1 1 7]]
+[[1 1 7]
+ [7 6 6]
+ [0 8 8]]
+```
 
 #### 60. How to tell if a given 2D array has null columns? (★★☆) 
 (**hint**: any, ~)
+```python
+import numpy as np
 
-
-
+Z = np.random.randint(0,3,(3,10))
+print((~Z.any(axis=0)).any())
+```
+Output:
+```
+False
+```
+  
 #### 61. Find the nearest value from a given value in an array (★★☆) 
 (**hint**: np.abs, argmin, flat)
+```python
+import numpy as np
 
-
+Z = np.random.uniform(0,1,10)
+z = 0.5
+m = Z.flat[np.abs(Z - z).argmin()]
+print(m)
+```
+Output:
+```
+#random
+0.5305518156479256
+```
 
 #### 62. Considering two arrays with shape (1,3) and (3,1), how to compute their sum using an iterator? (★★☆) 
 (**hint**: np.nditer)
+```python
+import numpy as np
 
-
+A = np.arange(3).reshape(3,1)
+B = np.arange(3).reshape(1,3)
+it = np.nditer([A,B,None])
+for x,y,z in it: z[...] = x + y
+print(it.operands[2])
+```
+Output:
+```
+[[0 1 2]
+ [1 2 3]
+ [2 3 4]]
+```
 
 #### 63. Create an array class that has a name attribute (★★☆) 
 (**hint**: class method)
+```python
+import numpy as np
+class NamedArray(np.ndarray):
+    def __new__(cls, array, name="no name"):
+        obj = np.asarray(array).view(cls)
+        obj.name = name
+        return obj
+    def __array_finalize__(self, obj):
+        if obj is None: return
+        self.name = getattr(obj, 'name', "no name")
 
-
+X = NamedArray(np.arange(10), "range_10")
+print (X.name)
+```
+Output:
+```
+range_10
+```
 
 #### 64. Consider a given vector, how to add 1 to each element indexed by a second vector (be careful with repeated indices)? (★★★) 
 (**hint**: np.bincount | np.add.at)
-
-
-
+```python
+import numpy as np
+  
+Z = np.ones(10)
+I = np.random.randint(0,len(Z),20)
+Z += np.bincount(I, minlength=len(Z))
+print(Z)
+```
+Output:
+```
+#random
+[3. 6. 2. 2. 4. 2. 1. 3. 3. 4.]
+```
 #### 65. How to accumulate elements of a vector (X) to an array (F) based on an index list (I)? (★★★) 
 (**hint**: np.bincount)
-
-
+```python
+import numpy as np
+  
+X = [1,2,3,4,5,6]
+I = [1,3,9,3,4,1]
+F = np.bincount(I,X)
+print(F)
+```
+Output:
+```
+[0. 7. 0. 6. 5. 0. 0. 0. 0. 3.]
+```
 
 #### 66. Considering a (w,h,3) image of (dtype=ubyte), compute the number of unique colors (★★★) 
 (**hint**: np.unique)
+```python
+import numpy as np
 
-
+w,h = 16,16
+I = np.random.randint(0,2,(h,w,3)).astype(np.ubyte)
+F = I[...,0]*256*256 + I[...,1]*256 +I[...,2]
+n = len(np.unique(F))
+print(np.unique(I))
+```
+Output:
+```
+[0 1]
+```
 
 #### 67. Considering a four dimensions array, how to get sum over the last two axis at once? (★★★) 
 (**hint**: sum(axis=(-2,-1)))
+```python
+import numpy as np
 
-
-
+A = np.random.randint(0,10,(3,4,3,4))
+sum = A.reshape(A.shape[:-2] + (-1,)).sum(axis=-1)
+print(sum)
+```
+Output:
+```
+#random
+[[46 60 60 59]
+ [58 51 54 59]
+ [44 42 45 45]]
+```
+  
 #### 68. Considering a one-dimensional vector D, how to compute means of subsets of D using a vector S of same size describing subset  indices? (★★★) 
 (**hint**: np.bincount)
+```python
+import numpy as np
 
-
+D = np.random.uniform(0,1,100)
+S = np.random.randint(0,10,100)
+D_sums = np.bincount(S, weights=D)
+D_counts = np.bincount(S)
+D_means = D_sums / D_counts
+print(D_means)
+```
+Output:
+```
+#random
+[0.41727248 0.42913527 0.7179096  0.54933571 0.46669399 0.4673405
+ 0.4418931  0.5549945  0.61780927 0.66975341]
+```
 
 #### 69. How to get the diagonal of a dot product? (★★★) 
 (**hint**: np.diag)
+```python
+import numpy as np
 
+A = np.random.randint(0,10,(3,3))
+B= np.random.randint(0,10,(3,3))
 
+np.diag(np.dot(A, B))                    # Slow version
+np.sum(A * B.T, axis=1)                  # Fast version
+np.einsum("ij,ji->i", A, B)              # Faster version
+```
+Output:
+```
+#random
+array([27, 93, 16])
+```
 
 #### 70. Consider the vector \[1, 2, 3, 4, 5\], how to build a new vector with 3 consecutive zeros interleaved between each value? (★★★) 
 (**hint**: array\[::4\])
+```python
+import numpy as np
 
-
-
+Z = np.array([1,2,3,4,5])
+nz = 3
+Z0 = np.zeros(len(Z) + (len(Z)-1)*(nz))
+Z0[::nz+1] = Z
+print(Z0)
+```
+Output:
+```
+[1. 0. 0. 0. 2. 0. 0. 0. 3. 0. 0. 0. 4. 0. 0. 0. 5.]
+```
+  
 #### 71. Consider an array of dimension (5,5,3), how to mulitply it by an array with dimensions (5,5)? (★★★) 
 (**hint**: array\[:, :, None\])
+```python
+import numpy as np
 
+A = np.ones((5,5,3))
+B = 2*np.ones((5,5))
+print(A * B[:,:,None])
+```
+Output:
+```
+[[[2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]]
 
+ [[2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]]
 
+ [[2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]]
+
+ [[2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]]
+
+ [[2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]
+  [2. 2. 2.]]]
+```
+  
 #### 72. How to swap two rows of an array? (★★★) 
 (**hint**: array\[\[\]\] = array\[\[\]\])
 
