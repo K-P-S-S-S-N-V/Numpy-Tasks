@@ -1859,6 +1859,7 @@ C = np.lib.stride_tricks.as_strided(Z, shape=(i, j, n, n), strides=Z.strides + Z
 print(C)
 ```
 Output:
+```
 #random
 [[[[3 4 3]
    [4 4 4]
@@ -1927,6 +1928,7 @@ Output:
    [4 2 0]
    [3 2 0]]]]
 ```
+  
 #### 85. Create a 2D array subclass such that Z\[i,j\] == Z\[j,i\] (★★★) 
 (**hint**: class method)
 ```python
@@ -1957,76 +1959,456 @@ Output:
 #### 86. Consider a set of p matrices wich shape (n,n) and a set of p vectors with shape (n,1). How to compute the sum of of the p matrix products at once? (result has shape (n,1)) (★★★) 
 (**hint**: np.tensordot)
 ```python
+import numpy as np
 
-
-
+p, n = 10, 20
+M = np.ones((p,n,n))                           # M is (p,n,n)
+V = np.ones((p,n,1))                           # V is (p,n,1)
+  
+# Thus, summing over the paired axes 0 and 0 (of M and V independently)
+# and 2 and 1, to remain with a (n,1) vector.
+S = np.tensordot(M, V, axes=[[0, 2], [0, 1]])
+print(S)
+```
+Output:
+```
+[[200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]
+ [200.]]
+```
 
 #### 87. Consider a 16x16 array, how to get the block-sum (block size is 4x4)? (★★★) 
 (**hint**: np.add.reduceat)
+```python
+import numpy as np
 
-
+A = np.ones((16,16))
+k = 4
+S = np.add.reduceat(np.add.reduceat(A, np.arange(0, A.shape[0], k), axis=0),
+                                       np.arange(0, A.shape[1], k), axis=1)
+print ('input array')
+print (A)
+print ('block sum')
+print (S)
+```
+Output:
+```
+input array
+[[1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]
+ [1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1. 1.]]
+block sum
+[[16. 16. 16. 16.]
+ [16. 16. 16. 16.]
+ [16. 16. 16. 16.]
+ [16. 16. 16. 16.]]
+```
 
 #### 88. How to implement the Game of Life using numpy arrays? (★★★)
+```python
+import numpy as np
+def iterate(A):
+    # Count neighbours
+    N = (A[0:-2,0:-2] + A[0:-2,1:-1] + A[0:-2,2:] +
+         A[1:-1,0:-2]                + A[1:-1,2:] +
+         A[2:  ,0:-2] + A[2:  ,1:-1] + A[2:  ,2:])
 
+    # Apply rules
+    birth = (N==3) & (Z[1:-1,1:-1]==0)
+    survive = ((N==2) | (N==3)) & (A[1:-1,1:-1]==1)
+    A[...] = 0
+    A[1:-1,1:-1][birth | survive] = 1
+    return A
 
+A = np.random.randint(0,2,(50,50))
+for i in range(100): A = iterate(A)
+print(A)
+```
+Output:
+```
+[[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+  1 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+  1 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 0 0 1 1 1 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 1 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 1 1 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 1 0 1 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0
+  0 0 0 0 0 1 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 0 0 0 1 1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0
+  0 0 0 0 0 1 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 1 0 1 1 1 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 1 0 0 1 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 1 1 0 0 0 1 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 1 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 1 1 0 1 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 1 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 1 1 0 1 1 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 1 0 0 0 0 0 0 0 0]
+ [0 0 0 1 1 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 1 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 1 0 0 0 0 0 0 0]
+ [0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 1 1 1 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 1 0 0 0 1 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 1 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 1 0 0 1 0 0 0 1 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 1 1 0 0 1 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  1 1 1 1 0 1 1 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+  1 0 0 1 1 0 1 1 0 0 1 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+  1 0 1 1 1 0 0 1 0 1 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
+  0 0 1 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+  0 1 0 0 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  1 0 1 1 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 1 1 0 0 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1 0 0 0 0 1 1 0 0 0 0 0 0 0
+  1 0 0 0 0 1 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0 0 0 0 1 1 0 0 0 0 0 0 0
+  1 1 1 0 1 1 0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+  0 0 0 0 0 0 0 0 0 0 0 0 0 0]]
+```
 
 #### 89. How to get the n largest values of an array (★★★) 
 (**hint**: np.argsort | np.argpartition)
-
-
+```python
+import numpy as np
+A = np.arange(10000)
+np.random.shuffle(A)
+n = 5
+print (A[np.argsort(A)[-n:]])                # Slow
+print (A[np.argpartition(-A,n)[:n]])         # Fast
+```
+Output:
+```
+[9995 9996 9997 9998 9999]
+[9995 9998 9999 9996 9997]
+```
 
 #### 90. Given an arbitrary number of vectors, build the cartesian product (every combinations of every item) (★★★) 
 (**hint**: np.indices)
+```python
+import numpy as np
+def cartesian(arrays):
+    arrays = [np.asarray(a) for a in arrays]
+    shape = (len(x) for x in arrays)
 
+    ix = np.indices(shape, dtype=int)
+    ix = ix.reshape(len(arrays), -1).T
 
+    for n, arr in enumerate(arrays):
+        ix[:, n] = arrays[n][ix[:, n]]
 
+    return ix
+
+print (cartesian(([1, 2, 3], [4, 5], [6, 7])))
+```
+Output:
+```
+[[1 4 6]
+ [1 4 7]
+ [1 5 6]
+ [1 5 7]
+ [2 4 6]
+ [2 4 7]
+ [2 5 6]
+ [2 5 7]
+ [3 4 6]
+ [3 4 7]
+ [3 5 6]
+ [3 5 7]]
+```
+  
 #### 91. How to create a record array from a regular array? (★★★) 
 (**hint**: np.core.records.fromarrays)
+```python
+import numpy as np
 
-
+A = np.array([("Hello", 2.5, 3),
+              ("World", 3.6, 2)])
+R = np.core.records.fromarrays(A.T,
+                               names='col1, col2, col3',
+                               formats = 'S8, f8, i8')
+print(R)
+```
+Output:
+```
+[(b'Hello', 2.5, 3) (b'World', 3.6, 2)]
+```
 
 #### 92. Consider a large vector Z, compute Z to the power of 3 using 3 different methods (★★★) 
 (**hint**: np.power, \*, np.einsum)
+```python
+import numpy as np
 
-
+x = np.random.rand(int(5e7))
+%timeit np.power(x,3)
+%timeit x*x*x
+%timeit np.einsum('i,i,i->i',x,x,x)
+```
+Output:
+```
+1.23 s ± 35.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+292 ms ± 22.5 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)
+215 ms ± 94.7 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+```
 
 #### 93. Consider two arrays A and B of shape (8,3) and (2,2). How to find rows of A that contain elements of each row of B regardless of the order of the elements in B? (★★★) 
 (**hint**: np.where)
+```python
+import numpy as np
 
+X = np.random.randint(0,5,(8,3))
+Y = np.random.randint(0,5,(2,2))
 
-
+Z = (X[..., np.newaxis, np.newaxis] == Y)
+rows = (Z.sum(axis=(1,2,3)) >= Y.shape[1]).nonzero()[0]
+print(rows)
+```
+Output:
+```
+[0 1 2 3 4 5 6 7]
+```
 #### 94. Considering a 10x3 matrix, extract rows with unequal values (e.g. \[2,2,3\]) (★★★)
+```python
+import numpy as np
 
-
-
+X = np.random.randint(0,5,(10,3))
+E = np.logical_and.reduce(X[:,1:] == X[:,:-1], axis=1)
+U = X[~E]
+print(X)
+print(U)
+```
+Output:
+```
+[[2 2 0]
+ [3 4 2]
+ [4 2 1]
+ [4 2 2]
+ [2 2 1]
+ [4 4 4]
+ [1 1 1]
+ [4 1 4]
+ [4 4 4]
+ [3 2 0]]
+[[2 2 0]
+ [3 4 2]
+ [4 2 1]
+ [4 2 2]
+ [2 2 1]
+ [4 1 4]
+ [3 2 0]]
+```
+  
 #### 95. Convert a vector of ints into a matrix binary representation (★★★) 
 (**hint**: np.unpackbits)
+```python
+import numpy as np
 
+I = np.array([0, 1, 2, 3, 15, 16, 32, 64, 128])
+B = ((I.reshape(-1,1) & (2**np.arange(8))) != 0).astype(int)
+print(B[:,::-1])
 
+I = np.array([0, 1, 2, 3, 15, 16, 32, 64, 128], dtype=np.uint8)
+print(np.unpackbits(I[:, np.newaxis], axis=1))
+```
+Output:
+```
+[[0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 1 0]
+ [0 0 0 0 0 0 1 1]
+ [0 0 0 0 1 1 1 1]
+ [0 0 0 1 0 0 0 0]
+ [0 0 1 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0]]
+[[0 0 0 0 0 0 0 0]
+ [0 0 0 0 0 0 0 1]
+ [0 0 0 0 0 0 1 0]
+ [0 0 0 0 0 0 1 1]
+ [0 0 0 0 1 1 1 1]
+ [0 0 0 1 0 0 0 0]
+ [0 0 1 0 0 0 0 0]
+ [0 1 0 0 0 0 0 0]
+ [1 0 0 0 0 0 0 0]]
+```
 
 #### 96. Given a two dimensional array, how to extract unique rows? (★★★) 
 (**hint**: np.ascontiguousarray)
+```python
+import numpy as np
 
-
+Z = np.random.randint(0,2,(6,3))
+T = np.ascontiguousarray(Z).view(np.dtype((np.void, Z.dtype.itemsize * Z.shape[1])))
+_, idx = np.unique(T, return_index=True)
+uZ = Z[idx]
+print(uZ)
+```
+Output:
+```
+[[0 0 0]
+ [0 1 1]
+ [1 0 0]
+ [1 1 1]]
+```
 
 #### 97. Considering 2 vectors A & B, write the einsum equivalent of inner, outer, sum, and mul function (★★★) 
 (**hint**: np.einsum)
+```python
+A= np.arange(3)
+B =  np.arange(12).reshape(3,4)
+print (A)
 
-
+#np.einsum('ii->', A)       # np.sum(A)
+#np.einsum('i,i->i', A, B) # A * B
+#np.einsum('i,i', A, B)    # np.inner(A, B)
+#np.einsum('...i,j', A, B)    # np.outer(A, B)
+```
+Output:
+```
+[0 1 2]
+```
 
 #### 98. Considering a path described by two vectors (X,Y), how to sample it using equidistant samples (★★★)? 
 (**hint**: np.cumsum, np.interp)
+```python
+phi = np.arange(0, 10*np.pi, 0.1)
+a = 1
+x = a*phi*np.cos(phi)
+y = a*phi*np.sin(phi)
 
-
+dr = (np.diff(x)**2 + np.diff(y)**2)**.5 # segment lengths
+r = np.zeros_like(x)
+r[1:] = np.cumsum(dr)                # integrate path
+r_int = np.linspace(0, r.max(), 200) # regular spaced path
+x_int = np.interp(r_int, r, x)       # integrate path
+y_int = np.interp(r_int, r, y)
+```
 
 #### 99. Given an integer n and a 2D array X, select from X the rows which can be interpreted as draws from a multinomial distribution with n degrees, i.e., the rows which only contain integers and which sum to n. (★★★) 
 (**hint**: np.logical\_and.reduce, np.mod)
-
-
+```python
+import numpy as np
+  
+X = np.asarray([[1.0, 0.0, 3.0, 8.0],
+                [2.0, 0.0, 1.0, 1.0],
+                [1.5, 2.5, 1.0, 0.0]])
+n = 4
+M = np.logical_and.reduce(np.mod(X, 1) == 0, axis=-1)
+M &= (X.sum(axis=-1) == n)
+print(X[M])
+```
+Output:
+```
+[[2. 0. 1. 1.]]
+```
 
 #### 100. Compute bootstrapped 95% confidence intervals for the mean of a 1D array X (i.e., resample the elements of an array with replacement N times, compute the mean of each sample, and then compute percentiles over the means). (★★★) 
 (**hint**: np.percentile)
-
+```python
+import numpy as np
+  
+X = np.random.randn(100) # random 1D array
+N = 1000 # number of bootstrap samples
+idx = np.random.randint(0, X.size, (N, X.size))
+means = X[idx].mean(axis=1)
+confint = np.percentile(means, [2.5, 97.5])
+print(confint)
+```
+Output:
+```
+[-0.18005813  0.22114647]
+```
 
 
 ## Installation
