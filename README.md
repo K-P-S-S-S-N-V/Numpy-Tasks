@@ -62,8 +62,8 @@ def null_array(n):
     return x
 print(null_array(10))
 ```
-#Or
-```
+Or
+```python
 import numpy as np
 X = np.zeros(10)
 print(X)
